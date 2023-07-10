@@ -1,15 +1,6 @@
 import Foundation
 
 class TaskRepository: ObservableObject, Repository {
-    func completedTask(id: UUID, model: TaskModel) async throws -> TaskModel {
-        guard var task = try await get(id: id) else {
-            return model
-        }
-        
-        task.isCompleted = true
-        return task
-    }
-    
     typealias T = TaskModel
     
     @Published
@@ -35,7 +26,7 @@ class TaskRepository: ObservableObject, Repository {
         
         task.priority = model.priority
         task.taskDescription = model.taskDescription
-        task.isProductive = model.isProductive
+        task.category = model.category
         
         return task
     }

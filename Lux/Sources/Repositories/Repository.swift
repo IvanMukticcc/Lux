@@ -14,5 +14,4 @@ protocol Repository {
     func update(id: UUID, model: T) async throws -> T
     func delete(id: UUID) async throws
     func remove(at offsets: IndexSet) async throws
-    func completedTask(id: UUID, model: T) async throws -> T
 }

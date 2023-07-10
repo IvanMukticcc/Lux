@@ -7,25 +7,34 @@ struct TasksView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             NavigationView {
-                List {
-                    Section {
-                        ForEach(viewStore.tasks.filter { !$0.isCompleted }, id: \.id) { task in
-                            TaskRowView(task: task)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    viewStore.send(.addCompletedTask(task))
+                Group {
+                    if viewStore.completedTasks.isEmpty && viewStore.uncompletedTasks.isEmpty {
+                        TasksEmptyView(store: store.scope(state: \.tasksEmptyState, action: Tasks.Action.tasksEmptyAction))
+                    } else {
+                        List {
+                            Section("UNCOMPLETED") {
+                                ForEach(viewStore.uncompletedTasks, id: \.id) { task in
+                                    TaskRowView(task: task)
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            viewStore.send(.addCompletedTask(task))
+                                        }
+                                        .tag(UUID())
                                 }
-                        }
-                        .onDelete { indices in
-                            viewStore.send(.deleteTask(indices))
-                        }
-                    }
-                    Section {
-                        ForEach(viewStore.tasks.filter { $0.isCompleted }, id: \.id) { task in
-                            TaskRowView(task: task)
-                        }
-                        .onDelete { indices in
-                            viewStore.send(.deleteTask(indices))
+                                .onDelete { indices in
+                                    viewStore.send(.deleteTask(indices))
+                                }
+                            }
+                            
+                            Section("COMPLETED") {
+                                ForEach(viewStore.completedTasks, id: \.id) { task in
+                                    TaskRowView(task: task)
+                                        .tag(UUID())
+                                }
+                                .onDelete { indices in
+                                    viewStore.send(.deleteTask(indices))
+                                }
+                            }
                         }
                     }
                 }
@@ -41,6 +50,7 @@ struct TasksView: View {
                 }
                 .sheet(isPresented: viewStore.binding(\.$isShowingAddNewTask)) {
                     AddTaskView(store: store.scope(state: \.addTaskState, action: Tasks.Action.addTaskAction))
+                        .presentationDetents([.medium])
                 }
                 .onAppear {
                     viewStore.send(.getTasks)

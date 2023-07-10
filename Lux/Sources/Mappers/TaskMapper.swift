@@ -9,7 +9,7 @@ struct TaskMapper: DomainModelMapper {
         return TaskModel(
             id: entity.id ?? UUID(),
             taskDescription: entity.taskDescription ?? "",
-            isProductive: entity.isProductive,
+            category: CategoryType(rawValue: Int(entity.category)) ?? .family,
             isCompleted: entity.isCompleted,
             priority: PriorityType(rawValue: Int(entity.priority)) ?? .high,
             dueDate: entity.dueDate ?? Date()
@@ -19,7 +19,7 @@ struct TaskMapper: DomainModelMapper {
     static func mapToEntity(from domain: TaskModel, entity: inout TaskModelEntity) {
         entity.id = domain.id
         entity.taskDescription = domain.taskDescription
-        entity.isProductive = domain.isProductive
+        entity.category = Int32(domain.category.rawValue)
         entity.isCompleted = domain.isCompleted
         entity.priority = Int32(domain.priority.rawValue)
         entity.dueDate = domain.dueDate

@@ -9,9 +9,9 @@ struct AddTask: ReducerProtocol {
         @BindingState
         var description = ""
         @BindingState
-        var priority: PriorityType = .high
+        var priority: PriorityType = .low
         @BindingState
-        var isTaskProductive = false
+        var category: CategoryType = .fun
         var isCompleted = false
         var task: TaskModel?
         @BindingState
@@ -22,6 +22,7 @@ struct AddTask: ReducerProtocol {
         case binding(BindingAction<State>)
         case addTaskButtonTapped
         case clearForm
+        case filterByDate(Date)
     }
     
     var body: some ReducerProtocol<State, Action>{
@@ -29,17 +30,25 @@ struct AddTask: ReducerProtocol {
         
         Reduce{ state, action in
             switch action {
-                
             case .binding(_):
                 return .none
+                
             case .addTaskButtonTapped:
-                let task = TaskModel(id: UUID(), taskDescription: state.description, isProductive: state.isTaskProductive, isCompleted: state.isCompleted, priority: state.priority, dueDate: state.dueDate)
+                let task = TaskModel(id: UUID(), taskDescription: state.description, category: state.category, isCompleted: state.isCompleted, priority: state.priority, dueDate: state.dueDate)
                 Task {
                     try await taskRepository.add(task)
                 }
                 return .task { .clearForm }
+                
             case .clearForm:
                 state.description = ""
+                state.dueDate = Date()
+                state.priority = .low
+                state.category = .family
+                return .none
+                
+            case .filterByDate(let date):
+                state.dueDate = date
                 return .none
             }
         }

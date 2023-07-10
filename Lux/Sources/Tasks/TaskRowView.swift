@@ -4,15 +4,14 @@ struct TaskRowView: View {
     var task: TaskModel
     
     var body: some View {
-            GeometryReader { geo in
                 HStack {
                     ZStack {
                         Circle()
                             .stroke(lineWidth: 4)
-                            .frame(height: geo.size.height * 0.70)
-                            .foregroundColor(task.isProductive ? .green : .red)
+                            .frame(height: 40)
+                            .foregroundColor(task.category.categoryColor)
                         
-                        Image(systemName: task.isProductive ? "heart" : "hand.thumbsdown")
+                        Image(systemName: task.category.categoryImage)
                                 .bold()
                        
                     }
@@ -31,9 +30,7 @@ struct TaskRowView: View {
                         .bold()
                         .foregroundColor(task.priority.priorityColor)
                 }
-            }
-            .frame(height: 50)
-            .padding(.top, 10)
+                .frame(height: 50)
      }
 }
 

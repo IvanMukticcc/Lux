@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		966287592A46DED700A703CF /* MultipleSelectionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966287582A46DED700A703CF /* MultipleSelectionRow.swift */; };
+		964065212A569B0D00C4FC3E /* TasksEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964065202A569B0D00C4FC3E /* TasksEmptyView.swift */; };
+		9661AB6F2A559AC000A6F142 /* PriorityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9661AB6E2A559AC000A6F142 /* PriorityType.swift */; };
+		9661AB712A559AEA00A6F142 /* CategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9661AB702A559AEA00A6F142 /* CategoryType.swift */; };
 		96ECFE202A42E4200053ED33 /* LuxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ECFE1F2A42E4200053ED33 /* LuxApp.swift */; };
 		96ECFE222A42E4200053ED33 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ECFE212A42E4200053ED33 /* ContentView.swift */; };
 		96ECFE242A42E4210053ED33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96ECFE232A42E4210053ED33 /* Assets.xcassets */; };
@@ -32,7 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		966287582A46DED700A703CF /* MultipleSelectionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionRow.swift; sourceTree = "<group>"; };
+		964065202A569B0D00C4FC3E /* TasksEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksEmptyView.swift; sourceTree = "<group>"; };
+		9661AB6E2A559AC000A6F142 /* PriorityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityType.swift; sourceTree = "<group>"; };
+		9661AB702A559AEA00A6F142 /* CategoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryType.swift; sourceTree = "<group>"; };
 		96ECFE1C2A42E4200053ED33 /* Lux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96ECFE1F2A42E4200053ED33 /* LuxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxApp.swift; sourceTree = "<group>"; };
 		96ECFE212A42E4200053ED33 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -112,7 +116,6 @@
 				96ECFE462A430F4F0053ED33 /* Modifiers */,
 				96ECFE412A430D760053ED33 /* AddTask */,
 				96ECFE3C2A42FDBE0053ED33 /* Tasks */,
-				96ECFE352A42E8350053ED33 /* TaskRow */,
 				96ECFE322A42E4EE0053ED33 /* Models */,
 				96ECFE492A431EA10053ED33 /* Repositories */,
 				96ECFE532A432D770053ED33 /* Dependencies.swift */,
@@ -133,16 +136,10 @@
 			isa = PBXGroup;
 			children = (
 				96ECFE332A42E64F0053ED33 /* TaskModel.swift */,
+				9661AB6E2A559AC000A6F142 /* PriorityType.swift */,
+				9661AB702A559AEA00A6F142 /* CategoryType.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		96ECFE352A42E8350053ED33 /* TaskRow */ = {
-			isa = PBXGroup;
-			children = (
-				966287582A46DED700A703CF /* MultipleSelectionRow.swift */,
-			);
-			path = TaskRow;
 			sourceTree = "<group>";
 		};
 		96ECFE3C2A42FDBE0053ED33 /* Tasks */ = {
@@ -151,6 +148,7 @@
 				96ECFE3D2A42FDD10053ED33 /* Tasks.swift */,
 				96ECFE3F2A42FE6B0053ED33 /* TasksView.swift */,
 				96ECFE3A2A42E9370053ED33 /* TaskRowView.swift */,
+				964065202A569B0D00C4FC3E /* TasksEmptyView.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -277,11 +275,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				96ECFE3B2A42E9370053ED33 /* TaskRowView.swift in Sources */,
+				9661AB6F2A559AC000A6F142 /* PriorityType.swift in Sources */,
 				96ECFE4F2A43214D0053ED33 /* TaskCoreDataRepository.swift in Sources */,
 				96ECFE572A4336DF0053ED33 /* Lux.xcdatamodeld in Sources */,
 				96ECFE222A42E4200053ED33 /* ContentView.swift in Sources */,
 				96ECFE542A432D770053ED33 /* Dependencies.swift in Sources */,
 				96ECFE5A2A4338CE0053ED33 /* TaskMapper.swift in Sources */,
+				964065212A569B0D00C4FC3E /* TasksEmptyView.swift in Sources */,
 				96ECFE5C2A4338FE0053ED33 /* DomainModelMapper.swift in Sources */,
 				96ECFE342A42E64F0053ED33 /* TaskModel.swift in Sources */,
 				96ECFE452A430DFA0053ED33 /* AddTaskView.swift in Sources */,
@@ -291,10 +291,10 @@
 				96ECFE4D2A431F990053ED33 /* TaskRepository.swift in Sources */,
 				96ECFE482A430F670053ED33 /* BasicTextFieldModifier.swift in Sources */,
 				96ECFE432A430D8F0053ED33 /* AddTask.swift in Sources */,
-				966287592A46DED700A703CF /* MultipleSelectionRow.swift in Sources */,
 				96FF8F212A49BFD300DB7054 /* TestView.swift in Sources */,
 				96ECFE202A42E4200053ED33 /* LuxApp.swift in Sources */,
 				96ECFE3E2A42FDD10053ED33 /* Tasks.swift in Sources */,
+				9661AB712A559AEA00A6F142 /* CategoryType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lux/Preview Content\"";
@@ -438,6 +439,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hr.propeller.lux.Lux;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -449,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lux/Preview Content\"";
@@ -467,6 +470,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hr.propeller.lux.Lux;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

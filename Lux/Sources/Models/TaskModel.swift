@@ -8,49 +8,10 @@ struct TaskModel: Equatable {
     
     var id: UUID
     var taskDescription: String
-    var isProductive: Bool
+    var category: CategoryType
     var isCompleted: Bool
     var priority: PriorityType
     var dueDate: Date
     
-    static let mock = TaskModel(id: UUID(), taskDescription: "Learn TCA", isProductive: false, isCompleted: true, priority: .high, dueDate: Date())
-}
-
-enum PriorityType: Int, CaseIterable, RawRepresentable {
-    case high = 0
-    case normal = 1
-    case low = 2
-    
-    var priorityColor: Color {
-        switch self {
-        case .high:
-            return .red
-        case .normal:
-            return .orange
-        case .low:
-            return .blue
-        }
-    }
-    
-    var priority: String {
-        switch self {
-        case .high:
-            return "High"
-        case .normal:
-            return "Normal"
-        case .low:
-            return "Low"
-        }
-    }
-    
-    var priorityImage: String {
-        switch self {
-        case .high:
-            return "exclamationmark.triangle"
-        case .normal:
-            return "pencil.and.ruler"
-        case .low:
-            return "circlebadge"
-        }
-    }
+    static let mock = TaskModel(id: UUID(), taskDescription: "Learn TCA", category: .hobby, isCompleted: true, priority: .high, dueDate: Date())
 }

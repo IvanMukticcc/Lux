@@ -6,13 +6,13 @@ struct Tasks: ReducerProtocol {
     var taskRepository
     
     struct State: Equatable {
-        var tasks: [TaskModel] = []
+        var uncompletedTasks: [TaskModel] = []
         var completedTasks: [TaskModel] = []
         @BindingState
         var isShowingAddNewTask = false
         var isTaskCompleted = false
-        
         var addTaskState = AddTask.State()
+        var tasksEmptyState = TasksEmpty.State()
     }
     
     enum Action: Equatable, BindableAction {
@@ -23,21 +23,29 @@ struct Tasks: ReducerProtocol {
         case tasksFetched(TaskResult<[TaskModel]>)
         case deleteTask(IndexSet)
         case addCompletedTask(TaskModel)
+        case taskCompleted(TaskResult<TaskModel>)
+        case tasksEmptyAction(TasksEmpty.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.addTaskState, action: /Action.addTaskAction) {
             AddTask()
         }
+        
+        Scope(state: \.tasksEmptyState, action: /Action.tasksEmptyAction) {
+            TasksEmpty()
+        }
+        
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .isAddNewTaskPresented(let isPresented):
                 state.isShowingAddNewTask = isPresented
                 return .none
-
+                
             case .addTaskAction:
                 return .none
+                
             case .binding(_):
                 return .none
                 
@@ -49,7 +57,8 @@ struct Tasks: ReducerProtocol {
                 }
                 
             case let .tasksFetched(.success(tasks)):
-                state.tasks = tasks
+                state.uncompletedTasks = tasks.filter { $0.isCompleted == false }
+                state.completedTasks = tasks.filter { $0.isCompleted == true }
                 return .none
                 
             case let .tasksFetched(.failure(error)):
@@ -60,16 +69,34 @@ struct Tasks: ReducerProtocol {
                 Task {
                     try await taskRepository.remove(at: indexSet)
                 }
-                return .none
+                return .task {.getTasks}
                 
             case .addCompletedTask(let task):
-                if let task = state.tasks.first(where: {$0 == task}) {
-                    Task {
-                        try await taskRepository.completedTask(id: task.id, model: task)
+                if var task = state.uncompletedTasks.first(where: {$0 == task}) {
+                    task.isCompleted = true
+                    let updatedTask = task
+                    return .task {
+                        await .taskCompleted(TaskResult {
+                            try await taskRepository.update(id: updatedTask.id, model: updatedTask)
+                        })
                     }
                 }
+                return .none
+                
+            case .taskCompleted:
+                return .task {
+                    .getTasks
+                }
+                
+            case .tasksEmptyAction(let action):
+                switch action {
+                case .addTaskAction(_):
+                    return .none
                     
-                return .task { .getTasks }
+                case .isAddNewTaskPresented(isPresented: let isPresented):
+                    state.isShowingAddNewTask = isPresented
+                }
+                return .none
             }
         }
     }

@@ -13,32 +13,49 @@ struct AddTaskView: View {
                     TextField("Enter task description", text: viewStore.binding(\.$description))
                         .inputStyle(.description)
                     
-                    Toggle("Productive", isOn: viewStore.binding(\.$isTaskProductive))
-                    
                     VStack(alignment: .leading) {
-                        Text("Priority")
-                        Picker("", selection: viewStore.binding(\.$priority)) {
-                            ForEach(PriorityType.allCases, id: \.self) { priority in
-                                Text(priority.priority)
-                                    .tag(priority)
+                        Picker("Category", selection: viewStore.binding(\.$category)) {
+                            ForEach(CategoryType.allCases, id: \.self) { category in
+                                HStack {
+                                    Text(category.categoryName)
+                                        .tag(category)
+                                    Image(systemName: category.categoryImage)
+                                        .imageScale(.small)
+                                }
                             }
                         }
-                        .pickerStyle(.segmented)
                     }
                     
+                    VStack(alignment: .leading) {
+                        Picker("Priority", selection: viewStore.binding(\.$priority)) {
+                            ForEach(PriorityType.allCases, id: \.self) { priority in
+                                HStack {
+                                    Text(priority.priorityName)
+                                        .tag(priority)
+                                    Image(systemName: priority.priorityImage)
+                                        .imageScale(.small)
+                                }
+                            }
+                        }
+                    }
                     DatePicker("Due Date", selection: viewStore.binding(\.$dueDate), displayedComponents: [.date, .hourAndMinute])
-                    
-                    HStack {
-                        Spacer()
+                }
+                .toolbar {
+                    ToolbarItem {
                         Button {
                             viewStore.send(.addTaskButtonTapped)
                             dissmis()
                         } label: {
-                            Text("Add new Task")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                            Image(systemName: "checkmark.square")
                         }
-                        Spacer()
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dissmis()
+                            viewStore.send(.clearForm)
+                        } label: {
+                            Image(systemName: "xmark.square")
+                        }
                     }
                 }
             }

@@ -100,23 +100,4 @@ class TaskCoreDataRepository: TaskRepository {
             try moc.save()
         }
     }
-    
-    override func completedTask(id: UUID, model: TaskModel) async throws -> TaskModel {
-        let request = TaskModelEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", id.uuidString)
-        
-        guard var taskEntity = try moc.fetch(request).first else {
-            throw RepositoryError.taskNotFound
-        }
-        taskEntity.isCompleted = true
-        TaskMapper.mapToEntity(from: model, entity: &taskEntity)
-        try await save()
-        
-        if let index = tasks.firstIndex(where: { $0.id == id }) {
-            tasks[index] = model
-        }
-        
-        return model
-    }
-
 }
