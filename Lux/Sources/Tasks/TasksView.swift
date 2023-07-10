@@ -54,6 +54,7 @@ struct TasksView: View {
                 }
                 .onAppear {
                     viewStore.send(.getTasks)
+                    viewStore.send(.requestNotificationPermission)
                 }
                 .onChange(of: viewStore.isShowingAddNewTask) { _ in
                     viewStore.send(.getTasks)

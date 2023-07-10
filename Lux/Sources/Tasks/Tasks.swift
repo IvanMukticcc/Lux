@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import UserNotifications
 import SwiftUI
 
 struct Tasks: ReducerProtocol {
@@ -25,6 +26,8 @@ struct Tasks: ReducerProtocol {
         case addCompletedTask(TaskModel)
         case taskCompleted(TaskResult<TaskModel>)
         case tasksEmptyAction(TasksEmpty.Action)
+        case requestNotificationPermission
+        case scheduleNotification
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -45,7 +48,16 @@ struct Tasks: ReducerProtocol {
                 
             case .addTaskAction:
                 return .none
-                
+
+            case .addTaskAction(let action):
+                switch action {
+                case .binding(_):
+                    return .none
+                case .addTaskButtonTapped:
+                    return .task {.scheduleNotification}
+                case .clearForm:
+                    return .none
+                }
             case .binding(_):
                 return .none
                 
@@ -95,9 +107,56 @@ struct Tasks: ReducerProtocol {
                     
                 case .isAddNewTaskPresented(isPresented: let isPresented):
                     state.isShowingAddNewTask = isPresented
+                return .task { .getTasks }
+                
+            case .requestNotificationPermission:
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                    if success {
+                        print("All set!")
+                    } else if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+                return .none
+                
+            case .scheduleNotification:
+                let content = UNMutableNotificationContent()
+                content.title = "Clean"
+                content.subtitle = "Mark task as completed, or complete it now!"
+                content.sound = UNNotificationSound.default
+                
+                var dateComponents = DateComponents()
+                dateComponents.weekday = state.addTaskState.dueDate.get(.day)
+                dateComponents.hour = state.addTaskState.dueDate.get(.hour)
+                dateComponents.minute = state.addTaskState.dueDate.get(.minute)
+                
+//                var dateComponents = DateComponents()
+//                dateComponents.weekday = 1
+//                dateComponents.hour = 14
+//                dateComponents.minute = 35
+                
+                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                
+                let notificationCenter = UNUserNotificationCenter.current()
+                notificationCenter.add(request) { (error) in
+                   if error != nil {
+                       print("Unable to send request \(String(describing: error?.localizedDescription))")
+                   }
                 }
                 return .none
             }
         }
+    }
+}
+
+
+extension Date {
+    func get(_ components: Calendar.Component..., calendar: Calendar = Calendar.current) -> DateComponents {
+        return calendar.dateComponents(Set(components), from: self)
+    }
+
+    func get(_ component: Calendar.Component, calendar: Calendar = Calendar.current) -> Int {
+        return calendar.component(component, from: self)
     }
 }
